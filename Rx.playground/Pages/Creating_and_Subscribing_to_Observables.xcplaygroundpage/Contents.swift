@@ -68,6 +68,13 @@ example("of") {
         })
         .addDisposableTo(disposeBag)
 }
+
+example("ofStudy") {
+    let disposeBag = DisposeBag()
+    Observable.of("hao","yi","peng").subscribe(onCompleted: {element in
+        print("完成了")
+    })
+}
 /*:
  > This example also introduces using the `subscribe(onNext:)` convenience method. Unlike `subscribe(_:)`, which subscribes an _event_ handler for all event types (Next, Error, and Completed), `subscribe(onNext:)` subscribes an _element_ handler that will ignore Error and Completed events and only produce Next event elements. There are also `subscribe(onError:)` and `subscribe(onCompleted:)` convenience methods, should you only want to subscribe to those event types. And there is a `subscribe(onNext:onError:onCompleted:onDisposed:)` method, which allows you to react to one or more event types and when the subscription is terminated for any reason, or disposed, in a single call:
  ```
@@ -89,12 +96,25 @@ example("from") {
         .subscribe(onNext: { print($0) })
         .addDisposableTo(disposeBag)
 }
+
+// 字典的from是把一个键值对当做一项
+example("fromDic") {
+    let disposeBag = DisposeBag()
+    
+    Observable.from(["firstName":"hao","lastName":"yipeng"]).subscribe(onNext: { print($0) })
+        .addDisposableTo(disposeBag)
+}
 /*:
  > This example also demonstrates using the default argument name `$0` instead of explicitly naming the argument.
 ----
  ## create
  Creates a custom `Observable` sequence. [More info](http://reactivex.io/documentation/operators/create.html)
 */
+// create 作用与用法
+// You pass this operator a function that accepts the observer as its parameter. Write this function so that it behaves as an Observable — by calling the observer’s onNext, onError, and onCompleted methods appropriately.
+// 将一个 observer 对象当做参数。在这个方法里适当的调用 observer 的 onNext、onCompleted、onError 方法
+// 在 `onCompleted` 方法或 `onError` 方法被调用一次之后就不能再调用其他的方法了，onCompleted 方法或 onError 方法两者只能调用一个
+
 example("create") {
     let disposeBag = DisposeBag()
     
@@ -152,6 +172,16 @@ example("generate") {
         .subscribe(onNext: { print($0) })
         .addDisposableTo(disposeBag)
 }
+
+example("generateStudy") {
+    let disposeBag = DisposeBag()
+    Observable.generate(initialState: 0,
+                        condition: {$0 < 5},
+                        iterate: {$0 + 2}
+        )
+        .subscribe(onNext:{ print($0) })
+        .addDisposableTo(disposeBag)
+}
 /*:
  ----
  ## deferred
@@ -167,9 +197,17 @@ example("deferred") {
         
         return Observable.create { observer in
             print("Emitting...")
-            observer.onNext("🐶")
-            observer.onNext("🐱")
-            observer.onNext("🐵")
+            if(count % 2 == 0) {
+                observer.onNext("Hao")
+                observer.onNext("yi")
+                observer.onNext("peng")
+                observer.onCompleted()
+            } else {
+                observer.onNext("🐶")
+                observer.onNext("🐱")
+                observer.onNext("🐵")
+                observer.onCompleted()
+            }
             return Disposables.create()
         }
     }

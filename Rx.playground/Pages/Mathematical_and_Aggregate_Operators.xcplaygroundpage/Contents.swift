@@ -62,9 +62,12 @@ example("concat") {
     variable.value = subject2
     
     subject2.onNext("I would be ignored")
+    // 第一个subject的onCompleted调用前的 另一个 subject 的值会被当做初始值
+    subject2.onNext("这个会不会被忽略掉呢？")
+    subject1.onCompleted()
     subject2.onNext("🐱")
     
-    subject1.onCompleted()
+    
     
     subject2.onNext("🐭")
 }

@@ -40,6 +40,7 @@ func sampleWithoutConnectableOperators() {
  Converts the source `Observable` sequence into a connectable sequence. [More info](http://reactivex.io/documentation/operators/publish.html)
  ![](http://reactivex.io/documentation/operators/images/publishConnect.c.png)
  */
+
 func sampleWithPublish() {
     printExampleHeader(#function)
     
@@ -76,7 +77,7 @@ func sampleWithReplayBuffer() {
     printExampleHeader(#function)
     
     let intSequence = Observable<Int>.interval(1, scheduler: MainScheduler.instance)
-        .replay(5)
+        .replay(3)
     
     _ = intSequence
         .subscribe(onNext: { print("Subscription 1:, Event: \($0)") })
@@ -94,7 +95,7 @@ func sampleWithReplayBuffer() {
     }
 }
 
-// sampleWithReplayBuffer() // ⚠️ Uncomment to run this example; comment to stop running
+//sampleWithReplayBuffer() // ⚠️ Uncomment to run this example; comment to stop running
 
 /*:
  ----

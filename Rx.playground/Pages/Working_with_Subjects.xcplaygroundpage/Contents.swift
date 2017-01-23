@@ -55,7 +55,7 @@ example("PublishSubject") {
 */
 example("ReplaySubject") {
     let disposeBag = DisposeBag()
-    let subject = ReplaySubject<String>.create(bufferSize: 1)
+    let subject = ReplaySubject<String>.create(bufferSize:1)
     
     subject.addObserver("1").addDisposableTo(disposeBag)
     subject.onNext("🐶")
